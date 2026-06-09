@@ -1,6 +1,6 @@
 # Detect Technologies Action
 
-A GitHub Action that detects buildable technologies in a repository based on file indicators.
+A GitHub Action that detects buildable technologies in a repository based on file indicators. Supports Python, Go, Rust, Java, Ansible Collections, Containers, Ansible Execution Environments, and Helm.
 
 ## Supported Technologies
 
