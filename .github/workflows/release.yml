@@ -2,14 +2,14 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'release/**']
 
 jobs:
   release:
     uses: calavia-org/workflows-lib/.github/workflows/release-github-action@v0
     with:
       default-bump: patch
-      release-branches: main
+      release-branches: main,release/**
       validate-action: true
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
