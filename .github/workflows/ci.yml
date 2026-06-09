@@ -2,14 +2,14 @@ name: PR Check
 
 on:
   pull_request:
-    branches: [main, 'release/**']
+    branches: [main, 'release/*']
   push:
-    branches: [main, 'release/**']
+    branches: [main, 'release/*']
 
 jobs:
   check:
-    uses: calavia-org/workflows-lib/.github/workflows/pr-check-github-action@v0
+    uses: calavia-org/workflows-lib/.github/workflows/pr-check-github-action.yml@v0
     with:
       validate-structure: true
       run-lint: true
-      run-test: false
+      run-test: true
