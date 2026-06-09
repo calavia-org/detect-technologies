@@ -1,52 +1,15 @@
-name: CI
+name: PR Check
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Test Python detection
-        uses: ./
-        id: python-test
-        with:
-          fail-on-missing: false
-
-      - name: Verify Python detection
-        run: |
-          if [ -n "${{ steps.python-test.outputs.python }}" ]; then
-            echo "✅ Python detected: ${{ steps.python-test.outputs.python }}"
-          else
-            echo "❌ Python not detected"
-            exit 1
-          fi
-
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate action.yml
-        run: |
-          if ! grep -q "^name:" action.yml; then
-            echo "❌ action.yml missing 'name' field"
-            exit 1
-          fi
-          
-          if ! grep -q "^description:" action.yml; then
-            echo "❌ action.yml missing 'description' field"
-            exit 1
-          fi
-          
-          if ! grep -q "^runs:" action.yml; then
-            echo "❌ action.yml missing 'runs' section"
-            exit 1
-          fi
-          
-          echo "✅ action.yml structure is valid"
+  check:
+    uses: calavia-org/workflows-lib/.github/workflows/pr-check-github-action@v0
+    with:
+      validate-structure: true
+      run-lint: true
+      run-test: false

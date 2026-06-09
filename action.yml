@@ -133,16 +133,8 @@ runs:
           COUNT=$((COUNT + 1))
         fi
         
-        # Helm detection
-        if [ -f "Chart.yml" ]; then
-          HELM="Chart.yml"
-        elif [ -f "chart.yml" ]; then
-          HELM="chart.yml"
-        elif [ -d "helm" ]; then
-          HELM="helm/"
-        elif [ -d "charts" ]; then
-          HELM="charts/"
-        fi
+        # Helm detection - find Chart.yml anywhere in the repo
+        HELM=$(find . -name "Chart.yml" -type f 2>/dev/null | head -1 | sed 's|^\./||')
         
         if [ -n "$HELM" ]; then
           TECHS="helm,${TECHS}"
