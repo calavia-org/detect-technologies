@@ -53,7 +53,7 @@ runs:
         CONTAINER=""
         ANSIBLE_EE=""
         HELM=""
-        
+
         # Python detection
         if [ -f "pyproject.toml" ]; then
           PYTHON="pyproject.toml"
@@ -66,26 +66,26 @@ runs:
         elif [ -f "Pipfile" ]; then
           PYTHON="Pipfile"
         fi
-        
+
         if [ -n "$PYTHON" ]; then
           TECHS="python,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Go detection
         if [ -f "go.mod" ]; then
           GO="go.mod"
           TECHS="go,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Rust detection
         if [ -f "Cargo.toml" ]; then
           RUST="Cargo.toml"
           TECHS="rust,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Java detection
         if [ -f "pom.xml" ]; then
           JAVA="pom.xml"
@@ -94,12 +94,12 @@ runs:
         elif [ -f "build.gradle.kts" ]; then
           JAVA="build.gradle.kts"
         fi
-        
+
         if [ -n "$JAVA" ]; then
           TECHS="java,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Ansible Collection detection
         if [ -f "galaxy.yml" ]; then
           if grep -q "type: collection" galaxy.yml 2>/dev/null; then
@@ -108,42 +108,42 @@ runs:
             COUNT=$((COUNT + 1))
           fi
         fi
-        
+
         # Container detection (Dockerfile or Containerfile)
         if [ -f "Dockerfile" ]; then
           CONTAINER="Dockerfile"
         elif [ -f "Containerfile" ]; then
           CONTAINER="Containerfile"
         fi
-        
+
         if [ -n "$CONTAINER" ]; then
           TECHS="container,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Ansible Execution Environment detection
         if [ -f "execution-environment.yml" ]; then
           ANSIBLE_EE="execution-environment.yml"
         elif [ -f "execution-environment.yaml" ]; then
           ANSIBLE_EE="execution-environment.yaml"
         fi
-        
+
         if [ -n "$ANSIBLE_EE" ]; then
           TECHS="ansible-execution-environment,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Helm detection - find Chart.yml anywhere in the repo
         HELM=$(find . -name "Chart.yml" -type f 2>/dev/null | head -1 | sed 's|^\./||')
-        
+
         if [ -n "$HELM" ]; then
           TECHS="helm,${TECHS}"
           COUNT=$((COUNT + 1))
         fi
-        
+
         # Remove trailing comma
         TECHS=$(echo "$TECHS" | sed 's/,$//')
-        
+
         # Set outputs
         echo "technologies=$TECHS" >> "$GITHUB_OUTPUT"
         echo "count=$COUNT" >> "$GITHUB_OUTPUT"
@@ -155,10 +155,10 @@ runs:
         echo "container=$CONTAINER" >> "$GITHUB_OUTPUT"
         echo "ansible-execution-environment=$ANSIBLE_EE" >> "$GITHUB_OUTPUT"
         echo "helm=$HELM" >> "$GITHUB_OUTPUT"
-        
+
         # Summary
         echo "Detected $COUNT technology(ies): $TECHS"
-        
+
         # Fail if requested and nothing detected
         if [ "$COUNT" -eq 0 ] && [ "${{ inputs.fail-on-missing }}" == "true" ]; then
           echo "No technologies detected"

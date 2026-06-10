@@ -2,14 +2,22 @@ name: Release
 
 on:
   push:
-    branches: [main, 'release/*']
+    branches:
+      - main
+      - 'release/*'
+
+permissions:
+  contents: write
 
 jobs:
   release:
-    uses: calavia-org/workflows-lib/.github/workflows/release-github-action.yml@v0
-    with:
-      default-bump: patch
-      release-branches: main,release/**
-      validate-action: true
-    secrets:
-      github-token: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Release to GitHub
+        uses: calavia-org/release-github@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
